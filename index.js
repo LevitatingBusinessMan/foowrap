@@ -41,8 +41,9 @@ class foostream {
         this.rate = options.rate;
         this.sub = options.sub;
 
-        var previousResults = {};
-        setInterval(() => {
+        const previousResults = {};
+
+        const search = () =>
             this.sub.forEach(sub => {
                 if (!previousResults[sub])
                     previousResults[sub] = [];
@@ -59,14 +60,15 @@ class foostream {
                     
                     previousResults[sub] = listing;
                 }
-
+    
                 if (this.type === "submission")
                     snoowrap.getSubreddit(sub).getNew().then(read);
                 if (this.type === "comment")
-                snoowrap.getSubreddit(sub).getNewComments().then(read);
+                    snoowrap.getSubreddit(sub).getNewComments().then(read);
             });
 
-        }, this.rate)
+        search() //Launch immediately once
+        setInterval(search, this.rate)
     }
 
     destroy() {
